@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Veículo - Calçadão do Automóvel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo__img" onclick="showHome()">
+                    <img src="logo_calcadao.png" alt="Calçadão do Automóvel" height="100px" width=auto>
+                </a>
+                <div class="header-buttons">
+                    <a href="login.html" class="btn btn-login">Login</a>
+                    <a href="dashboard.html" class="btn btn-cadastro">Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Yellow Bar -->
+    <div class="yellow-bar"></div>
+
+    <!-- Vehicle Registration Form -->
+    <div class="container">
+        <div class="form-container vehicle-form">
+            <h2 class="form-title">Cadastro de Veículo</h2>
+            <div id="alert-container"></div>
+            
+            <div id="vehicle-limits" class="alert alert-info">
+                <strong>Limite de anúncios:</strong> 
+                <span id="limit-text">Carregando...</span>
+            </div>
+            
+            <form id="vehicle-form">
+                <div class="form-group">
+                    <label class="form-label">Tipo de Veículo:</label>
+                    <select class="form-select" id="vehicle-type" onchange="updatePhotoGuidelines()" required>
+                        <option value="">Selecione o tipo</option>
+                        <option value="car">Carro</option>
+                        <option value="motorcycle">Moto</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Marca:</label>
+                        <select class="form-select" id="brand" onchange="updateModels()" required>
+                            <option value="">Selecione a marca</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Modelo:</label>
+                        <select class="form-select" id="model" disabled required>
+                            <option value="">Primeiro selecione a marca</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Ano de Fabricação:</label>
+                        <input type="number" class="form-input" id="manufacture-year" min="1990" max="2025" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ano do Modelo:</label>
+                        <input type="number" class="form-input" id="model-year" min="1990" max="2026" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Cor:</label>
+                        <select class="form-select" id="color" required>
+                            <option value="">Selecione a cor</option>
+                            <option value="branco">Branco</option>
+                            <option value="preto">Preto</option>
+                            <option value="prata">Prata</option>
+                            <option value="cinza">Cinza</option>
+                            <option value="vermelho">Vermelho</option>
+                            <option value="azul">Azul</option>
+                            <option value="verde">Verde</option>
+                            <option value="amarelo">Amarelo</option>
+                            <option value="marrom">Marrom</option>
+                            <option value="dourado">Dourado</option>
+                            <option value="outro">Outro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Final do Chassi:</label>
+                        <input type="text" class="form-input" id="chassis" maxlength="8" placeholder="Últimos 8 dígitos" required>
+                        <small style="color: #666;">Apenas os últimos 8 dígitos</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Placa:</label>
+                    <input type="text" class="form-input" id="license-plate" placeholder="ABC-1234 ou ABC1D23" maxlength="8" required>
+                    <small style="color: #666;">Formato antigo (ABC-1234) ou Mercosul (ABC1D23)</small>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Combustível:</label>
+                        <select class="form-select" id="fuel" required>
+                            <option value="">Selecione</option>
+                            <option value="gasoline">Gasolina</option>
+                            <option value="ethanol">Etanol</option>
+                            <option value="flex">Flex</option>
+                            <option value="hybrid">Híbrido</option>
+                            <option value="electric">Elétrico</option>
+                            <option value="diesel">Diesel</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Quilometragem:</label>
+                        <input type="number" class="form-input" id="mileage" placeholder="Ex: 25000" min="0" required>
+                        <small style="color: #666;">KM atual do veículo</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-checkbox">
+                        <input type="checkbox" id="gnv">
+                        <label for="gnv">Possui GNV (Gás Natural Veicular)</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Preço:</label>
+                    <input type="text" class="form-input" id="price" placeholder="R$ 0,00" required>
+                    <small style="color: #666;">Preço de venda do veículo</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Opcionais:</label>
+                    <div class="checkbox-grid" id="optionals-grid">
+                        <!-- Car optionals -->
+                        <div class="form-checkbox car-optional">
+                            <input type="checkbox" id="ac">
+                            <label for="ac">Ar Condicionado</label>
+                        </div>
+                        <div class="form-checkbox car-optional">
+                            <input type="checkbox" id="power-steering">
+                            <label for="power-steering">Direção Hidráulica/Elétrica</label>
+                        </div>
+                        <div class="form-checkbox car-optional">
+                            <input type="checkbox" id="electric-windows">
+                            <label for="electric-windows">Vidros Elétricos</label>
+                        </div>
+                        <div class="form-checkbox car-optional">
+                            <input type="checkbox" id="central-lock">
+                            <label for="central-lock">Trava Elétrica</label>
+                        </div>
+                        <div class="form-checkbox car-optional">
+                            <input type="checkbox" id="airbag">
+                            <label for="airbag">Airbag</label>
+                        </div>
+                        <div class="form-checkbox car-optional">
+                            <input type="checkbox" id="abs">
+                            <label for="abs">Freios ABS</label>
+                        </div>
+                        <div class="form-checkbox car-optional">
+                            <input type="checkbox" id="alarm">
+                            <label for="alarm">Alarme</label>
+                        </div>
+                        <div class="form-checkbox car-optional">
+                            <input type="checkbox" id="sound-system">
+                            <label for="sound-system">Som</label>
+                        </div>
+                        <div class="form-checkbox car-optional">
+                            <input type="checkbox" id="leather-seats">
+                            <label for="leather-seats">Bancos de Couro</label>
+                        </div>
+                        <div class="form-checkbox car-optional">
+                            <input type="checkbox" id="sunroof">
+                            <label for="sunroof">Teto Solar</label>
+                        </div>
+                        <div class="form-checkbox car-optional">
+                            <input type="checkbox" id="alloy-wheels">
+                            <label for="alloy-wheels">Rodas de Liga</label>
+                        </div>
+                        <div class="form-checkbox car-optional">
+                            <input type="checkbox" id="gps">
+                            <label for="gps">GPS/Multimídia</label>
+                        </div>
+                        
+                        <!-- Motorcycle optionals -->
+                        <div class="form-checkbox motorcycle-optional" style="display: none;">
+                            <input type="checkbox" id="moto-abs">
+                            <label for="moto-abs">Freios ABS</label>
+                        </div>
+                        <div class="form-checkbox motorcycle-optional" style="display: none;">
+                            <input type="checkbox" id="moto-alarm">
+                            <label for="moto-alarm">Alarme</label>
+                        </div>
+                        <div class="form-checkbox motorcycle-optional" style="display: none;">
+                            <input type="checkbox" id="electric-start">
+                            <label for="electric-start">Partida Elétrica</label>
+                        </div>
+                        <div class="form-checkbox motorcycle-optional" style="display: none;">
+                            <input type="checkbox" id="moto-gps">
+                            <label for="moto-gps">GPS</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Descrição (Opcional):</label>
+                    <textarea class="form-input" id="description" rows="4" placeholder="Descreva características especiais, histórico do veículo, motivo da venda, etc."></textarea>
+                </div>
+
+                <!-- Photo Guidelines -->
+                <div id="photo-guidelines" class="photo-guidelines">
+                    <h4>Selecione o tipo de veículo para ver as instruções de fotos</h4>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Fotos do Veículo:</label>
+                    <div class="file-upload" onclick="document.getElementById('vehicle-photos').click()">
+                        <p>Clique para adicionar fotos (múltiplas fotos obrigatórias)</p>
+                        <input type="file" id="vehicle-photos" style="display: none" accept="image/*" multiple capture="environment" required>
+                    </div>
+                    <div id="photo-preview" style="margin-top: 15px;"></div>
+                </div>
+
+                <button type="submit" class="form-submit" id="vehicle-submit-btn">
+                    Cadastrar Veículo
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Desenvolvido por Atentus Cloud</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        // Vehicle data
+        const vehicleData = {
+            car: {
+                honda: ['Civic', 'Fit', 'HR-V', 'CR-V', 'Accord', 'City', 'WR-V'],
+                toyota: ['Corolla', 'Camry', 'RAV4', 'Hilux', 'Prius', 'Yaris', 'SW4'],
+                volkswagen: ['Golf', 'Jetta', 'Passat', 'Tiguan', 'T-Cross', 'Polo', 'Virtus'],
+                ford: ['Focus', 'Fiesta', 'EcoSport', 'Ranger', 'Mustang', 'Edge', 'Ka'],
+                chevrolet: ['Onix', 'Cruze', 'Tracker', 'S10', 'Camaro', 'Equinox', 'Spin'],
+                fiat: ['Uno', 'Palio', 'Strada', 'Toro', 'Argo', 'Cronos', 'Mobi'],
+                hyundai: ['HB20', 'Elantra', 'Tucson', 'Santa Fe', 'Creta', 'i30'],
+                nissan: ['March', 'Versa', 'Sentra', 'Kicks', 'Frontier', 'X-Trail'],
+                renault: ['Sandero', 'Logan', 'Duster', 'Captur', 'Kwid', 'Oroch']
+            },
+            motorcycle: {
+                honda: ['CB 600F', 'CBR 600RR', 'CG 160', 'XRE 300', 'PCX', 'Biz 125'],
+                yamaha: ['MT-07', 'YZF-R3', 'Factor 150', 'XTZ 250', 'NMAX', 'Crosser'],
+                suzuki: ['GSX-R750', 'V-Strom 650', 'Intruder 150', 'Yes 125', 'Burgman'],
+                kawasaki: ['Ninja 400', 'Z400', 'Versys 650', 'Z900', 'Ninja ZX-10R'],
+                bmw: ['G 310 R', 'F 850 GS', 'S 1000 RR', 'R 1250 GS'],
+                ducati: ['Monster 821', 'Panigale V2', 'Multistrada 950', 'Scrambler']
+            }
+        };
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserLimits();
+            populateBrands();
+        });
+
+        function loadUserLimits() {
+            // Get user type from session or simulate
+            const userData = JSON.parse(sessionStorage.getItem('registrationData') || '{}');
+            const userType = userData.userType || 'individual';
+            const currentVehicles = parseInt(sessionStorage.getItem('userVehicleCount') || '0');
+            
+            const limits = {
+                individual: { max: 2, label: 'Pessoa Física pode cadastrar até 2 veículos' },
+                company: { max: 20, label: 'Pessoa Jurídica pode cadastrar até 20 veículos' }
+            };
+            
+            const limit = limits[userType];
+            document.getElementById('limit-text').textContent = 
+                `${limit.label}. Você possui ${currentVehicles} anúncio(s) ativo(s).`;
+            
+            if (currentVehicles >= limit.max) {
+                showAlert('error', 'Limite de anúncios atingido. Remova um anúncio existente para cadastrar outro.');
+                document.getElementById('vehicle-submit-btn').disabled = true;
+            }
+        }
+
+        function populateBrands() {
+            const brandSelect = document.getElementById('brand');
+            const vehicleType = document.getElementById('vehicle-type').value;
+            
+            brandSelect.innerHTML = '<option value="">Selecione a marca</option>';
+            
+            if (vehicleType && vehicleData[vehicleType]) {
+                Object.keys(vehicleData[vehicleType]).forEach(brand => {
+                    const option = document.createElement('option');
+                    option.value = brand;
+                    option.textContent = brand.charAt(0).toUpperCase() + brand.slice(1);
+                    brandSelect.appendChild(option);
+                });
+            }
+        }
+
+        function updateModels() {
+            const vehicleType = document.getElementById('vehicle-type').value;
+            const brand = document.getElementById('brand').value;
+            const modelSelect = document.getElementById('model');
+            
+            modelSelect.innerHTML = '<option value="">Selecione o modelo</option>';
+            modelSelect.disabled = false;
+            
+            if (vehicleType && brand && vehicleData[vehicleType][brand]) {
+                vehicleData[vehicleType][brand].forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model.toLowerCase().replace(/\s+/g, '-');
+                    option.textContent = model;
+                    modelSelect.appendChild(option);
+                });
+            }
+        }
+
+        function updatePhotoGuidelines() {
+            const vehicleType = document.getElementById('vehicle-type').value;
+            const guidelines = document.getElementById('photo-guidelines');
+            const optionals = document.querySelectorAll('.car-optional, .motorcycle-optional');
+            
+            // Update optionals visibility
+            optionals.forEach(optional => {
+                const isCar = optional.classList.contains('car-optional');
+                const isMoto = optional.classList.contains('motorcycle-optional');
+                
+                if (vehicleType === 'car' && isCar) {
+                    optional.style.display = 'flex';
+                } else if (vehicleType === 'motorcycle' && isMoto) {
+                    optional.style.display = 'flex';
+                } else {
+                    optional.style.display = 'none';
+                    // Uncheck hidden checkboxes
+                    const checkbox = optional.querySelector('input[type="checkbox"]');
+                    if (checkbox) checkbox.checked = false;
+                }
+            });
+            
+            // Update photo guidelines
+            if (vehicleType === 'motorcycle') {
+                guidelines.innerHTML = `
+                    <h4>Fotos Obrigatórias para Motos (6 fotos):</h4>
+                    <ul>
+                        <li><strong>Frente:</strong> Moto de frente mostrando farol e placa</li>
+                        <li><strong>Lateral esquerda:</strong> Vista completa do lado esquerdo</li>
+                        <li><strong>Lateral direita:</strong> Vista completa do lado direito</li>
+                        <li><strong>Traseira:</strong> Moto de trás mostrando placa e lanterna</li>
+                        <li><strong>Painel:</strong> Instrumentos e painel de controle</li>
+                        <li><strong>Chassi:</strong> Número do chassi no garfo ou chassi</li>
+                    </ul>
+                `;
+            } else if (vehicleType === 'car') {
+                guidelines.innerHTML = `
+                    <h4>Fotos Obrigatórias para Carros (7 fotos):</h4>
+                    <ul>
+                        <li><strong>Frente com placa:</strong> Carro de frente mostrando a placa</li>
+                        <li><strong>Motor:</strong> Capô aberto mostrando o motor</li>
+                        <li><strong>Lateral esquerda:</strong> Vista completa do lado esquerdo</li>
+                        <li><strong>Traseira com placa:</strong> Carro de trás mostrando a placa</li>
+                        <li><strong>Porta-malas:</strong> Porta-malas aberto</li>
+                        <li><strong>Lateral direita:</strong> Vista completa do lado direito</li>
+                        <li><strong>Interior:</strong> Painel e bancos internos</li>
+                    </ul>
+                `;
+            } else {
+                guidelines.innerHTML = '<h4>Selecione o tipo de veículo para ver as instruções de fotos</h4>';
+            }
+            
+            populateBrands();
+        }
+
+        // Vehicle type change handler
+        document.getElementById('vehicle-type').addEventListener('change', updatePhotoGuidelines);
+
+        // Form validation and submission
+        document.getElementById('vehicle-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!validateVehicleForm()) {
+                return;
+            }
+            
+            const submitBtn = document.getElementById('vehicle-submit-btn');
+            submitBtn.innerHTML = '<span class="loading"></span> Processando...';
+            submitBtn.disabled = true;
+            
+            // Simulate AI validation of photos and vehicle data
+            setTimeout(() => {
+                if (validateVehiclePhotos()) {
+                    const vehicleData = collectVehicleData();
+                    
+                    // Save vehicle data
+                    const existingVehicles = JSON.parse(localStorage.getItem('userVehicles') || '[]');
+                    existingVehicles.push(vehicleData);
+                    localStorage.setItem('userVehicles', JSON.stringify(existingVehicles));
+                    
+                    // Update vehicle count
+                    const currentCount = parseInt(sessionStorage.getItem('userVehicleCount') || '0');
+                    sessionStorage.setItem('userVehicleCount', (currentCount + 1).toString());
+                    
+                    showAlert('success', 'Veículo cadastrado com sucesso! Redirecionando...');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+                } else {
+                    submitBtn.innerHTML = 'Cadastrar Veículo';
+                    submitBtn.disabled = false;
+                }
+            }, 3000);
+        });
+
+        function validateVehicleForm() {
+            const vehicleType = document.getElementById('vehicle-type').value;
+            const brand = document.getElementById('brand').value;
+            const model = document.getElementById('model').value;
+            const manufactureYear = document.getElementById('manufacture-year').value;
+            const modelYear = document.getElementById('model-year').value;
+            const color = document.getElementById('color').value;
+            const chassis = document.getElementById('chassis').value;
+            const licensePlate = document.getElementById('license-plate').value;
+            const fuel = document.getElementById('fuel').value;
+            const mileage = document.getElementById('mileage').value;
+            const price = document.getElementById('price').value;
+            const photos = document.getElementById('vehicle-photos').files;
+
+            if (!vehicleType || !brand || !model) {
+                showAlert('error', 'Selecione o tipo, marca e modelo do veículo.');
+                return false;
+            }
+
+            const currentYear = new Date().getFullYear();
+            if (!manufactureYear || manufactureYear < 1990 || manufactureYear > currentYear) {
+                showAlert('error', `Ano de fabricação deve estar entre 1990 e ${currentYear}.`);
+                return false;
+            }
+
+            if (!modelYear || modelYear < 1990 || modelYear > (currentYear + 1)) {
+                showAlert('error', `Ano do modelo deve estar entre 1990 e ${currentYear + 1}.`);
+                return false;
+            }
+
+            if (!color) {
+                showAlert('error', 'Selecione a cor do veículo.');
+                return false;
+            }
+
+            if (!chassis || chassis.length !== 8) {
+                showAlert('error', 'Final do chassi deve ter exatamente 8 dígitos.');
+                return false;
+            }
+
+            if (!validateLicensePlate(licensePlate)) {
+                showAlert('error', 'Placa inválida. Use formato ABC-1234 ou ABC1D23.');
+                return false;
+            }
+
+            if (!fuel) {
+                showAlert('error', 'Selecione o tipo de combustível.');
+                return false;
+            }
+
+            if (!mileage || mileage < 0) {
+                showAlert('error', 'Quilometragem deve ser um número válido.');
+                return false;
+            }
+
+            if (!price || parseFloat(price.replace(/[^\d,]/g, '').replace(',', '.')) <= 0) {
+                showAlert('error', 'Preço deve ser um valor válido.');
+                return false;
+            }
+
+            const requiredPhotos = vehicleType === 'motorcycle' ? 6 : 7;
+            if (photos.length < requiredPhotos) {
+                showAlert('error', `São necessárias ${requiredPhotos} fotos para o tipo de veículo selecionado.`);
+                return false;
+            }
+
+            return true;
+        }
+
+        function validateLicensePlate(plate) {
+            // Remove spaces and convert to uppercase
+            const cleanPlate = plate.replace(/\s/g, '').toUpperCase();
+            
+            // Old format: ABC-1234 or ABC1234
+            const oldFormat = /^[A-Z]{3}-?\d{4}$/;
+            // Mercosul format: ABC1D23 or ABC1-D23
+            const mercosulFormat = /^[A-Z]{3}\d[A-Z]\d{2}$/;
+            
+            return oldFormat.test(cleanPlate) || mercosulFormat.test(cleanPlate);
+        }
+
+        function validateVehiclePhotos() {
+            showAlert('info', 'Validando fotos e dados do veículo com IA...');
+            
+            // Simulate AI validation
+            const isValid = Math.random() > 0.15; // 85% success rate
+            
+            if (isValid) {
+                showAlert('success', 'Fotos e dados validados com sucesso!');
+                return true;
+            } else {
+                showAlert('error', 'Algumas fotos não puderam ser validadas. Verifique se todas as fotos obrigatórias foram enviadas e estão nítidas.');
+                return false;
+            }
+        }
+
+        function collectVehicleData() {
+            const optionals = [];
+            document.querySelectorAll('#optionals-grid input[type="checkbox"]:checked').forEach(checkbox => {
+                optionals.push(checkbox.id);
+            });
+
+            return {
+                id: Date.now(),
+                type: document.getElementById('vehicle-type').value,
+                brand: document.getElementById('brand').value,
+                model: document.getElementById('model').value,
+                manufactureYear: document.getElementById('manufacture-year').value,
+                modelYear: document.getElementById('model-year').value,
+                color: document.getElementById('color').value,
+                chassis: document.getElementById('chassis').value,
+                licensePlate: document.getElementById('license-plate').value,
+                fuel: document.getElementById('fuel').value,
+                mileage: document.getElementById('mileage').value,
+                hasGNV: document.getElementById('gnv').checked,
+                price: document.getElementById('price').value,
+                optionals: optionals,
+                description: document.getElementById('description').value,
+                createdAt: new Date().toISOString(),
+                status: 'active'
+            };
+        }
+
+        // Format price input
+        document.getElementById('price').addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, '');
+            value = (parseInt(value) / 100).toFixed(2);
+            value = value.replace('.', ',');
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            this.value = 'R$ ' + value;
+        });
+
+        // Format license plate
+        document.getElementById('license-plate').addEventListener('input', function() {
+            let value = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+            
+            if (value.length > 3 && value.length <= 7) {
+                // Check if it's Mercosul format (letter in 5th position)
+                if (value.length >= 5 && /[A-Z]/.test(value.charAt(4))) {
+                    // Mercosul format: ABC1D23
+                    this.value = value;
+                } else {
+                    // Old format: ABC-1234
+                    this.value = value.substring(0, 3) + '-' + value.substring(3);
+                }
+            } else {
+                this.value = value;
+            }
+        });
+
+        // Chassis input - only allow alphanumeric
+        document.getElementById('chassis').addEventListener('input', function() {
+            this.value = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+        });
+
+        // Photo preview
+        document.getElementById('vehicle-photos').addEventListener('change', function() {
+            const files = this.files;
+            const preview = document.getElementById('photo-preview');
+            const upload = this.closest('.file-upload');
+            
+            if (files.length > 0) {
+                upload.querySelector('p').textContent = `${files.length} foto(s) selecionada(s)`;
+                upload.style.borderColor = '#28a745';
+                
+                // Show photo count
+                preview.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 10px; font-size: 14px; color: #666;">
+                        <span>📷 ${files.length} fotos selecionadas</span>
+                        <button type="button" onclick="clearPhotos()" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Limpar</button>
+                    </div>
+                `;
+            }
+        });
+
+        function clearPhotos() {
+            document.getElementById('vehicle-photos').value = '';
+            document.getElementById('photo-preview').innerHTML = '';
+            const upload = document.querySelector('.file-upload');
+            upload.querySelector('p').textContent = 'Clique para adicionar fotos (múltiplas fotos obrigatórias)';
+            upload.style.borderColor = '#ddd';
+        }
+
+        // Setup file upload
+        setupFileUpload();
+    </script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Pessoa Física - Calçadão do Automóvel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo__img" onclick="showHome()">
+                    <img src="logo_calcadao.png" alt="Calçadão do Automóvel" height="100px" width=auto>
+                </a>
+                <div class="header-buttons">
+                    <a href="login.html" class="btn btn-login">Login</a>
+                    <a href="cadastro-tipo.html" class="btn btn-cadastro">Cadastro</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Yellow Bar -->
+    <div class="yellow-bar"></div>
+
+    <!-- Progress Indicator -->
+    <div class="container">
+        <div class="progress-indicator">
+            <div class="progress-step active"></div>
+            <div class="progress-step"></div>
+            <div class="progress-step"></div>
+        </div>
+    </div>
+
+    <!-- Registration Form -->
+    <div class="container">
+        <div class="form-container">
+            <h2 class="form-title">Cadastro - Pessoa Física</h2>
+            <div id="alert-container"></div>
+            
+            <form id="register-form">
+                <div class="form-group">
+                    <label class="form-label">Login:</label>
+                    <input type="text" class="form-input" id="login" required>
+                    <small style="color: #666;">Será usado para entrar no sistema</small>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Nome Completo:</label>
+                    <input type="text" class="form-input" id="fullname" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email:</label>
+                    <input type="email" class="form-input" id="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">CEP:</label>
+                    <input type="text" class="form-input" id="cep" placeholder="00000-000" maxlength="9" required>
+                    <small style="color: #666;">O endereço será preenchido automaticamente</small>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Endereço:</label>
+                    <input type="text" class="form-input" id="address" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Número/Complemento:</label>
+                    <input type="text" class="form-input" id="complement" placeholder="Ex: 123, Lote 5 Quadra B" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Telefone Comercial (Opcional):</label>
+                    <input type="tel" class="form-input" id="commercial-phone" placeholder="(11) 3000-0000">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Celular (WhatsApp):</label>
+                    <input type="tel" class="form-input" id="mobile-phone" placeholder="(11) 90000-0000" required>
+                    <small style="color: #666;">Será usado para contato via WhatsApp</small>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Senha:</label>
+                    <input type="password" class="form-input" id="password" required>
+                    <small style="color: #666;">Mín. 8 dígitos, 1 maiúscula, 1 caracter especial</small>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Confirmar Senha:</label>
+                    <input type="password" class="form-input" id="confirm-password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Tipo de Documento:</label>
+                    <select class="form-select" id="document-type" required>
+                        <option value="">Selecione o documento</option>
+                        <option value="rg">RG</option>
+                        <option value="passport">Passaporte</option>
+                        <option value="cnh">CNH</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Documento:</label>
+                    <div class="file-upload" onclick="document.getElementById('document-file').click()">
+                        <p>Clique para importar ou tire uma foto do documento</p>
+                        <input type="file" id="document-file" style="display: none" accept="image/*" capture="environment" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="form-submit" id="register-btn">
+                    Continuar para Verificação
+                </button>
+            </form>
+            
+            <div class="form-links">
+                <p>Já possui cadastro? <a href="login.html">Clique aqui para entrar</a></p>
+                <p><a href="cadastro-tipo.html">Voltar para seleção de tipo</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Desenvolvido por Atentus Cloud</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        // CEP lookup
+        document.getElementById('cep').addEventListener('blur', function() {
+            const cep = this.value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                lookupCEP(cep);
+            }
+        });
+
+        function lookupCEP(cep) {
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.erro) {
+                        document.getElementById('address').value = 
+                            `${data.logradouro}, ${data.bairro}, ${data.localidade} - ${data.uf}`;
+                        showAlert('success', 'Endereço encontrado e preenchido automaticamente!');
+                    } else {
+                        showAlert('error', 'CEP não encontrado. Verifique e tente novamente.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar CEP:', error);
+                    showAlert('error', 'Erro ao buscar CEP. Tente novamente.');
+                });
+        }
+
+        // Form validation and submission
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!validateForm()) {
+                return;
+            }
+            
+            const registerBtn = document.getElementById('register-btn');
+            registerBtn.innerHTML = '<span class="loading"></span> Processando...';
+            registerBtn.disabled = true;
+            
+            // Simulate document validation with AI
+            setTimeout(() => {
+                if (validateDocument()) {
+                    // Store form data for next step
+                    const formData = collectFormData();
+                    sessionStorage.setItem('registrationData', JSON.stringify(formData));
+                    
+                    showAlert('success', 'Documento validado! Redirecionando para verificação de selfie...');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'selfie-verification.html';
+                    }, 2000);
+                } else {
+                    registerBtn.innerHTML = 'Continuar para Verificação';
+                    registerBtn.disabled = false;
+                }
+            }, 3000);
+        });
+
+        function validateForm() {
+            const login = document.getElementById('login').value;
+            const fullname = document.getElementById('fullname').value;
+            const email = document.getElementById('email').value;
+            const cep = document.getElementById('cep').value;
+            const address = document.getElementById('address').value;
+            const complement = document.getElementById('complement').value;
+            const mobilePhone = document.getElementById('mobile-phone').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const documentType = document.getElementById('document-type').value;
+            const documentFile = document.getElementById('document-file').files[0];
+
+            // Basic validation
+            if (!login.trim() || login.length < 3) {
+                showAlert('error', 'Login deve ter pelo menos 3 caracteres.');
+                return false;
+            }
+
+            if (!fullname.trim() || fullname.length < 5) {
+                showAlert('error', 'Nome completo deve ter pelo menos 5 caracteres.');
+                return false;
+            }
+
+            if (!validateEmail(email)) {
+                showAlert('error', 'Email inválido.');
+                return false;
+            }
+
+            if (cep.replace(/\D/g, '').length !== 8) {
+                showAlert('error', 'CEP deve ter 8 dígitos.');
+                return false;
+            }
+
+            if (!address.trim()) {
+                showAlert('error', 'Endereço não foi preenchido. Verifique o CEP.');
+                return false;
+            }
+
+            if (!complement.trim()) {
+                showAlert('error', 'Número/Complemento é obrigatório.');
+                return false;
+            }
+
+            if (mobilePhone.replace(/\D/g, '').length < 10) {
+                showAlert('error', 'Celular deve ter pelo menos 10 dígitos.');
+                return false;
+            }
+
+            if (!validatePassword(password)) {
+                showAlert('error', 'Senha deve ter pelo menos 8 caracteres, 1 maiúscula e 1 caractere especial.');
+                return false;
+            }
+
+            if (password !== confirmPassword) {
+                showAlert('error', 'Senhas não coincidem.');
+                return false;
+            }
+
+            if (!documentType) {
+                showAlert('error', 'Selecione o tipo de documento.');
+                return false;
+            }
+
+            if (!documentFile) {
+                showAlert('error', 'Envie uma foto do documento.');
+                return false;
+            }
+
+            return true;
+        }
+
+        function validateDocument() {
+            const documentFile = document.getElementById('document-file').files[0];
+            const documentType = document.getElementById('document-type').value;
+            
+            // Simulate AI document validation
+            showAlert('info', 'Validando documento com IA...');
+            
+            // In real implementation, this would call an AI service
+            const isValid = Math.random() > 0.1; // 90% success rate for demo
+            
+            if (isValid) {
+                showAlert('success', 'Documento validado com sucesso!');
+                return true;
+            } else {
+                showAlert('error', 'Documento não pôde ser validado. Verifique se a foto está nítida e o documento é válido.');
+                return false;
+            }
+        }
+
+        function collectFormData() {
+            return {
+                userType: 'individual',
+                login: document.getElementById('login').value,
+                fullname: document.getElementById('fullname').value,
+                email: document.getElementById('email').value,
+                cep: document.getElementById('cep').value,
+                address: document.getElementById('address').value,
+                complement: document.getElementById('complement').value,
+                commercialPhone: document.getElementById('commercial-phone').value,
+                mobilePhone: document.getElementById('mobile-phone').value,
+                password: document.getElementById('password').value,
+                documentType: document.getElementById('document-type').value
+            };
+        }
+
+        // Format inputs
+        document.getElementById('cep').addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, '');
+            if (value.length > 5) {
+                value = value.substring(0, 5) + '-' + value.substring(5, 8);
+            }
+            this.value = value;
+        });
+
+        document.getElementById('commercial-phone').addEventListener('input', formatPhoneInput);
+        document.getElementById('mobile-phone').addEventListener('input', formatPhoneInput);
+
+        function formatPhoneInput() {
+            let value = this.value.replace(/\D/g, '');
+            if (value.length === 11) {
+                value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            } else if (value.length === 10) {
+                value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+            }
+            this.value = value;
+        }
+
+        // File upload feedback
+        document.getElementById('document-file').addEventListener('change', function() {
+            const file = this.files[0];
+            const upload = this.closest('.file-upload');
+            
+            if (file) {
+                upload.querySelector('p').textContent = `Arquivo selecionado: ${file.name}`;
+                upload.style.borderColor = '#28a745';
+            }
+        });
+
+        // Drag and drop for file upload
+        setupFileUpload();
+    </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calçadão do Automóvel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo__img" onclick="showHome()">
+                    <img src="logo_calcadao.png" alt="Calçadão do Automóvel" height="100px" width=auto>
+                </a>
+                <div class="header-buttons">
+                    <a href="login.html" class="btn btn-login">Login</a>
+                    <a href="cadastro-tipo.html" class="btn btn-cadastro">Cadastro</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Yellow Bar -->
+    <div class="yellow-bar"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="search-container">
+            <h1>Encontre seu veículo ideal</h1>
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Digite o nome do veículo que você procura..." id="search-input">
+                <button class="search-btn" onclick="performSearch()">Pesquisar</button>
+            </div>
+            <p>A maneira mais segura de comprar ou vender seu veículo</p>
+        </div>
+    </section>
+
+    <!-- Featured Section -->
+    <section class="featured">
+        <div class="container">
+            <h2>Principais Destaques</h2>
+            <div class="featured-grid" id="featured-vehicles">
+                <div class="car-card" onclick="viewVehicle(1)">
+                    <div class="car-image">Imagem do veículo</div>
+                    <div class="car-info">
+                        <div class="car-title">Honda Civic EXL 2022</div>
+                        <div class="car-price">R$ 125.000</div>
+                        <div class="car-details">
+                            Automático • Flex • 15.000 km<br>
+                            São Paulo - SP
+                        </div>
+                    </div>
+                </div>
+                <div class="car-card" onclick="viewVehicle(2)">
+                    <div class="car-image">Imagem do veículo</div>
+                    <div class="car-info">
+                        <div class="car-title">Toyota Corolla GLI 2021</div>
+                        <div class="car-price">R$ 98.000</div>
+                        <div class="car-details">
+                            Automático • Flex • 22.000 km<br>
+                            Rio de Janeiro - RJ
+                        </div>
+                    </div>
+                </div>
+                <div class="car-card" onclick="viewVehicle(3)">
+                    <div class="car-image">Imagem do veículo</div>
+                    <div class="car-info">
+                        <div class="car-title">Volkswagen T-Cross 2020</div>
+                        <div class="car-price">R$ 85.000</div>
+                        <div class="car-details">
+                            Manual • Flex • 35.000 km<br>
+                            Belo Horizonte - MG
+                        </div>
+                    </div>
+                </div>
+                <div class="car-card" onclick="viewVehicle(4)">
+                    <div class="car-image">Imagem do veículo</div>
+                    <div class="car-info">
+                        <div class="car-title">Yamaha MT-07 2023</div>
+                        <div class="car-price">R$ 42.000</div>
+                        <div class="car-details">
+                            Manual • Gasolina • 5.000 km<br>
+                            Curitiba - PR
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Desenvolvido por Atentus Cloud</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        // Search functionality
+        function performSearch() {
+            const searchTerm = document.getElementById('search-input').value;
+            if (searchTerm.trim()) {
+                // Simulate search results
+                showAlert('info', `Pesquisando por: ${searchTerm}. Funcionalidade será implementada nas próximas etapas.`);
+            }
+        }
+
+        // Enter key search
+        document.getElementById('search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // View vehicle details
+        function viewVehicle(id) {
+            showAlert('info', `Visualizando detalhes do veículo ${id}. Esta funcionalidade será implementada nas próximas etapas.`);
+        }
+
+        // Load featured vehicles (simulate API call)
+        function loadFeaturedVehicles() {
+            // This would be replaced with actual API call
+            console.log('Loading featured vehicles...');
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFeaturedVehicles();
+        });
+    </script>
+</body>
+</html>

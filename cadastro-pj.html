@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Pessoa Jurídica - Calçadão do Automóvel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo__img" onclick="showHome()">
+                    <img src="logo_calcadao.png" alt="Calçadão do Automóvel" height="100px" width=auto>
+                </a>
+                <div class="header-buttons">
+                    <a href="login.html" class="btn btn-login">Login</a>
+                    <a href="cadastro-tipo.html" class="btn btn-cadastro">Cadastro</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Yellow Bar -->
+    <div class="yellow-bar"></div>
+
+    <!-- Progress Indicator -->
+    <div class="container">
+        <div class="progress-indicator">
+            <div class="progress-step active"></div>
+            <div class="progress-step"></div>
+            <div class="progress-step"></div>
+        </div>
+    </div>
+
+    <!-- Registration Form -->
+    <div class="container">
+        <div class="form-container">
+            <h2 class="form-title">Cadastro - Pessoa Jurídica</h2>
+            <div id="alert-container"></div>
+            
+            <form id="register-form">
+                <div class="form-group">
+                    <label class="form-label">CNPJ:</label>
+                    <input type="text" class="form-input" id="cnpj" placeholder="00.000.000/0000-00" maxlength="18" required>
+                    <small style="color: #666;">Digite apenas números ou com formatação</small>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Razão Social:</label>
+                    <input type="text" class="form-input" id="company-name" required readonly>
+                    <small style="color: #666;">Será preenchido automaticamente após validação do CNPJ</small>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Nome Fantasia:</label>
+                    <input type="text" class="form-input" id="trade-name">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Login:</label>
+                    <input type="text" class="form-input" id="login" required>
+                    <small style="color: #666;">Será usado para entrar no sistema</small>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Nome do Responsável:</label>
+                    <input type="text" class="form-input" id="responsible-name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email:</label>
+                    <input type="email" class="form-input" id="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">CEP:</label>
+                    <input type="text" class="form-input" id="cep" placeholder="00000-000" maxlength="9" required>
+                    <small style="color: #666;">O endereço será preenchido automaticamente</small>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Endereço:</label>
+                    <input type="text" class="form-input" id="address" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Número/Complemento:</label>
+                    <input type="text" class="form-input" id="complement" placeholder="Ex: 123, Sala 456" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Telefone Comercial:</label>
+                    <input type="tel" class="form-input" id="commercial-phone" placeholder="(11) 3000-0000" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Celular (WhatsApp):</label>
+                    <input type="tel" class="form-input" id="mobile-phone" placeholder="(11) 90000-0000" required>
+                    <small style="color: #666;">Será usado para contato via WhatsApp</small>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Senha:</label>
+                    <input type="password" class="form-input" id="password" required>
+                    <small style="color: #666;">Mín. 8 dígitos, 1 maiúscula, 1 caracter especial</small>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Confirmar Senha:</label>
+                    <input type="password" class="form-input" id="confirm-password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Tipo de Documento do Responsável:</label>
+                    <select class="form-select" id="document-type" required>
+                        <option value="">Selecione o documento</option>
+                        <option value="rg">RG</option>
+                        <option value="passport">Passaporte</option>
+                        <option value="cnh">CNH</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Documento do Responsável:</label>
+                    <div class="file-upload" onclick="document.getElementById('document-file').click()">
+                        <p>Clique para importar ou tire uma foto do documento</p>
+                        <input type="file" id="document-file" style="display: none" accept="image/*" capture="environment" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Contrato Social ou Documento da Empresa:</label>
+                    <div class="file-upload" onclick="document.getElementById('company-document').click()">
+                        <p>Clique para importar documento da empresa (PDF ou imagem)</p>
+                        <input type="file" id="company-document" style="display: none" accept="image/*,application/pdf" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="form-submit" id="register-btn">
+                    Continuar para Verificação
+                </button>
+            </form>
+            
+            <div class="form-links">
+                <p>Já possui cadastro? <a href="login.html">Clique aqui para entrar</a></p>
+                <p><a href="cadastro-tipo.html">Voltar para seleção de tipo</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Desenvolvido por Atentus Cloud</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        // CNPJ validation and company data lookup
+        document.getElementById('cnpj').addEventListener('blur', function() {
+            const cnpj = this.value.replace(/\D/g, '');
+            if (cnpj.length === 14) {
+                validateCNPJ(cnpj);
+            }
+        });
+
+        function validateCNPJ(cnpj) {
+            // Show loading state
+            const companyNameField = document.getElementById('company-name');
+            companyNameField.value = 'Consultando...';
+            
+            // Simulate CNPJ validation and company lookup
+            setTimeout(() => {
+                const isValid = validateCNPJDigits(cnpj);
+                
+                if (isValid) {
+                    // Simulate API call to get company data
+                    const companyData = getCompanyDataByCNPJ(cnpj);
+                    
+                    if (companyData) {
+                        companyNameField.value = companyData.razaoSocial;
+                        document.getElementById('trade-name').value = companyData.nomeFantasia || '';
+                        
+                        // If company has address, fill CEP
+                        if (companyData.cep) {
+                            document.getElementById('cep').value = formatCEP(companyData.cep);
+                            lookupCEP(companyData.cep.replace(/\D/g, ''));
+                        }
+                        
+                        showAlert('success', 'CNPJ validado e dados da empresa carregados!');
+                    } else {
+                        showAlert('warning', 'CNPJ válido, mas dados da empresa não encontrados. Preencha manualmente.');
+                        companyNameField.value = '';
+                        companyNameField.removeAttribute('readonly');
+                    }
+                } else {
+                    showAlert('error', 'CNPJ inválido. Verifique os dígitos.');
+                    companyNameField.value = '';
+                }
+            }, 2000);
+        }
+
+        function validateCNPJDigits(cnpj) {
+            // Basic CNPJ validation algorithm
+            if (cnpj.length !== 14) return false;
+            
+            // Check for common invalid patterns
+            if (/^(\d)\1+$/.test(cnpj)) return false;
+            
+            // Calculate verification digits
+            let sum = 0;
+            let weight = 5;
+            
+            for (let i = 0; i < 12; i++) {
+                sum += parseInt(cnpj[i]) * weight;
+                weight = weight === 2 ? 9 : weight - 1;
+            }
+            
+            let digit1 = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+            
+            sum = 0;
+            weight = 6;
+            
+            for (let i = 0; i < 13; i++) {
+                sum += parseInt(cnpj[i]) * weight;
+                weight = weight === 2 ? 9 : weight - 1;
+            }
+            
+            let digit2 = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+            
+            return parseInt(cnpj[12]) === digit1 && parseInt(cnpj[13]) === digit2;
+        }
+
+        function getCompanyDataByCNPJ(cnpj) {
+            // Simulate company data lookup (in real app, would call external API)
+            const companies = {
+                '11222333000181': {
+                    razaoSocial: 'EMPRESA EXEMPLO LTDA',
+                    nomeFantasia: 'Exemplo Corp',
+                    cep: '01310-100'
+                },
+                '12345678000195': {
+                    razaoSocial: 'AUTOMOVEIS E COMERCIO LTDA',
+                    nomeFantasia: 'Auto Commerce',
+                    cep: '04038-001'
+                }
+            };
+            
+            return companies[cnpj] || null;
+        }
+
+        // CEP lookup (same as PF)
+        document.getElementById('cep').addEventListener('blur', function() {
+            const cep = this.value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                lookupCEP(cep);
+            }
+        });
+
+        function lookupCEP(cep) {
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.erro) {
+                        document.getElementById('address').value = 
+                            `${data.logradouro}, ${data.bairro}, ${data.localidade} - ${data.uf}`;
+                        showAlert('success', 'Endereço encontrado e preenchido automaticamente!');
+                    } else {
+                        showAlert('error', 'CEP não encontrado. Verifique e tente novamente.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar CEP:', error);
+                    showAlert('error', 'Erro ao buscar CEP. Tente novamente.');
+                });
+        }
+
+        // Form validation and submission
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!validateForm()) {
+                return;
+            }
+            
+            const registerBtn = document.getElementById('register-btn');
+            registerBtn.innerHTML = '<span class="loading"></span> Processando...';
+            registerBtn.disabled = true;
+            
+            // Simulate document validation with AI
+            setTimeout(() => {
+                if (validateDocuments()) {
+                    // Store form data for next step
+                    const formData = collectFormData();
+                    sessionStorage.setItem('registrationData', JSON.stringify(formData));
+                    
+                    showAlert('success', 'Documentos validados! Redirecionando para verificação de selfie...');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'selfie-verification.html';
+                    }, 2000);
+                } else {
+                    registerBtn.innerHTML = 'Continuar para Verificação';
+                    registerBtn.disabled = false;
+                }
+            }, 3000);
+        });
+
+        function validateForm() {
+            const cnpj = document.getElementById('cnpj').value.replace(/\D/g, '');
+            const companyName = document.getElementById('company-name').value;
+            const login = document.getElementById('login').value;
+            const responsibleName = document.getElementById('responsible-name').value;
+            const email = document.getElementById('email').value;
+            const cep = document.getElementById('cep').value;
+            const address = document.getElementById('address').value;
+            const complement = document.getElementById('complement').value;
+            const commercialPhone = document.getElementById('commercial-phone').value;
+            const mobilePhone = document.getElementById('mobile-phone').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const documentType = document.getElementById('document-type').value;
+            const documentFile = document.getElementById('document-file').files[0];
+            const companyDocument = document.getElementById('company-document').files[0];
+
+            // CNPJ validation
+            if (cnpj.length !== 14 || !validateCNPJDigits(cnpj)) {
+                showAlert('error', 'CNPJ inválido.');
+                return false;
+            }
+
+            if (!companyName.trim()) {
+                showAlert('error', 'Razão social é obrigatória.');
+                return false;
+            }
+
+            if (!login.trim() || login.length < 3) {
+                showAlert('error', 'Login deve ter pelo menos 3 caracteres.');
+                return false;
+            }
+
+            if (!responsibleName.trim() || responsibleName.length < 5) {
+                showAlert('error', 'Nome do responsável deve ter pelo menos 5 caracteres.');
+                return false;
+            }
+
+            if (!validateEmail(email)) {
+                showAlert('error', 'Email inválido.');
+                return false;
+            }
+
+            if (cep.replace(/\D/g, '').length !== 8) {
+                showAlert('error', 'CEP deve ter 8 dígitos.');
+                return false;
+            }
+
+            if (!address.trim()) {
+                showAlert('error', 'Endereço não foi preenchido. Verifique o CEP.');
+                return false;
+            }
+
+            if (!complement.trim()) {
+                showAlert('error', 'Número/Complemento é obrigatório.');
+                return false;
+            }
+
+            if (commercialPhone.replace(/\D/g, '').length < 10) {
+                showAlert('error', 'Telefone comercial deve ter pelo menos 10 dígitos.');
+                return false;
+            }
+
+            if (mobilePhone.replace(/\D/g, '').length < 10) {
+                showAlert('error', 'Celular deve ter pelo menos 10 dígitos.');
+                return false;
+            }
+
+            if (!validatePassword(password)) {
+                showAlert('error', 'Senha deve ter pelo menos 8 caracteres, 1 maiúscula e 1 caractere especial.');
+                return false;
+            }
+
+            if (password !== confirmPassword) {
+                showAlert('error', 'Senhas não coincidem.');
+                return false;
+            }
+
+            if (!documentType) {
+                showAlert('error', 'Selecione o tipo de documento.');
+                return false;
+            }
+
+            if (!documentFile) {
+                showAlert('error', 'Envie uma foto do documento do responsável.');
+                return false;
+            }
+
+            if (!companyDocument) {
+                showAlert('error', 'Envie o documento da empresa.');
+                return false;
+            }
+
+            return true;
+        }
+
+        function validateDocuments() {
+            showAlert('info', 'Validando documentos com IA...');
+            
+            // Simulate AI document validation
+            const isValid = Math.random() > 0.1; // 90% success rate for demo
+            
+            if (isValid) {
+                showAlert('success', 'Documentos validados com sucesso!');
+                return true;
+            } else {
+                showAlert('error', 'Documentos não puderam ser validados. Verifique se as fotos/arquivos estão nítidos e são válidos.');
+                return false;
+            }
+        }
+
+        function collectFormData() {
+            return {
+                userType: 'company',
+                cnpj: document.getElementById('cnpj').value,
+                companyName: document.getElementById('company-name').value,
+                tradeName: document.getElementById('trade-name').value,
+                login: document.getElementById('login').value,
+                responsibleName: document.getElementById('responsible-name').value,
+                email: document.getElementById('email').value,
+                cep: document.getElementById('cep').value,
+                address: document.getElementById('address').value,
+                complement: document.getElementById('complement').value,
+                commercialPhone: document.getElementById('commercial-phone').value,
+                mobilePhone: document.getElementById('mobile-phone').value,
+                password: document.getElementById('password').value,
+                documentType: document.getElementById('document-type').value
+            };
+        }
+
+        // Format inputs
+        document.getElementById('cnpj').addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, '');
+            value = value.replace(/^(\d{2})(\d)/, '$1.$2');
+            value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+            value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
+            value = value.replace(/(\d{4})(\d)/, '$1-$2');
+            this.value = value;
+        });
+
+        document.getElementById('cep').addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, '');
+            if (value.length > 5) {
+                value = value.substring(0, 5) + '-' + value.substring(5, 8);
+            }
+            this.value = value;
+        });
+
+        document.getElementById('commercial-phone').addEventListener('input', formatPhoneInput);
+        document.getElementById('mobile-phone').addEventListener('input', formatPhoneInput);
+
+        function formatPhoneInput() {
+            let value = this.value.replace(/\D/g, '');
+            if (value.length === 11) {
+                value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            } else if (value.length === 10) {
+                value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+            }
+            this.value = value;
+        }
+
+        function formatCEP(cep) {
+            const cleaned = cep.replace(/\D/g, '');
+            return cleaned.substring(0, 5) + '-' + cleaned.substring(5, 8);
+        }
+
+        // File upload feedback
+        document.getElementById('document-file').addEventListener('change', function() {
+            const file = this.files[0];
+            const upload = this.closest('.file-upload');
+            
+            if (file) {
+                upload.querySelector('p').textContent = `Documento selecionado: ${file.name}`;
+                upload.style.borderColor = '#28a745';
+            }
+        });
+
+        document.getElementById('company-document').addEventListener('change', function() {
+            const file = this.files[0];
+            const upload = this.closest('.file-upload');
+            
+            if (file) {
+                upload.querySelector('p').textContent = `Documento da empresa: ${file.name}`;
+                upload.style.borderColor = '#28a745';
+            }
+        });
+
+        // Setup file uploads
+        setupFileUpload();
+    </script>
+</body>
+</html>

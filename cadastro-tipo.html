@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tipo de Cadastro - Calçadão do Automóvel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo__img" onclick="showHome()">
+                    <img src="logo_calcadao.png" alt="Calçadão do Automóvel" height="100px" width=auto>
+                </a>
+                <div class="header-buttons">
+                    <a href="login.html" class="btn btn-login">Login</a>
+                    <a href="cadastro-tipo.html" class="btn btn-cadastro">Cadastro</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Yellow Bar -->
+    <div class="yellow-bar"></div>
+
+    <!-- User Type Selection -->
+    <div class="container">
+        <div class="form-container">
+            <h2 class="form-title">Escolha o Tipo de Cadastro</h2>
+            <p style="text-align: center; margin-bottom: 30px; color: #666;">
+                Selecione o tipo de cadastro que melhor se adequa ao seu perfil
+            </p>
+            
+            <div class="user-type-selector">
+                <div class="user-type-option" onclick="selectUserType('individual')">
+                    <h3>👤 Pessoa Física</h3>
+                    <p>Para comprar ou vender seu veículo</p>
+                    <ul style="text-align: left; margin-top: 15px; color: #666; font-size: 14px;">
+                        <li>Até 2 veículos simultâneos</li>
+                        <li>Cadastro simplificado</li>
+                        <li>Verificação por documento e selfie</li>
+                    </ul>
+                </div>
+                
+                <div class="user-type-option" onclick="selectUserType('company')">
+                    <h3>🏢 Pessoa Jurídica</h3>
+                    <p>Para empresas e revendedores de veículos</p>
+                    <ul style="text-align: left; margin-top: 15px; color: #666; font-size: 14px;">
+                        <li>Até 20 veículos simultâneos</li>
+                        <li>Recursos empresariais</li>
+                        <li>Validação de CNPJ automática</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="form-links">
+                <p>Já possui cadastro? <a href="login.html">Faça login aqui</a></p>
+                <p><a href="index.html">Voltar para a página inicial</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Desenvolvido por Atentus Cloud</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        function selectUserType(type) {
+            // Update visual selection
+            document.querySelectorAll('.user-type-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.target.closest('.user-type-option').classList.add('selected');
+            
+            // Store selection and redirect after a brief delay
+            sessionStorage.setItem('selectedUserType', type);
+            
+            setTimeout(() => {
+                if (type === 'individual') {
+                    window.location.href = 'cadastro-pf.html';
+                } else if (type === 'company') {
+                    window.location.href = 'cadastro-pj.html';
+                }
+            }, 500);
+        }
+
+        // Check if user type was previously selected
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectedType = sessionStorage.getItem('selectedUserType');
+            if (selectedType) {
+                const option = document.querySelector(`[onclick="selectUserType('${selectedType}')"]`);
+                if (option) {
+                    option.classList.add('selected');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

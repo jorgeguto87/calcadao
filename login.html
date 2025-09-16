@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Calçadão do Automóvel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo__img" onclick="showHome()">
+                    <img src="logo_calcadao.png" alt="Calçadão do Automóvel" height="100px" width=auto>
+                </a>
+                <div class="header-buttons">
+                    <a href="login.html" class="btn btn-login">Login</a>
+                    <a href="cadastro-tipo.html" class="btn btn-cadastro">Cadastro</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Yellow Bar -->
+    <div class="yellow-bar"></div>
+
+    <!-- Login Form -->
+    <div class="container">
+        <div class="form-container">
+            <h2 class="form-title">Login</h2>
+            <div id="alert-container"></div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label class="form-label">Login:</label>
+                    <input type="text" class="form-input" id="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Senha:</label>
+                    <input type="password" class="form-input" id="password" required>
+                </div>
+                
+                <button type="submit" class="form-submit" id="login-btn">
+                    Entrar
+                </button>
+            </form>
+            
+            <div class="form-links">
+                <p><a href="redefinir-senha.html">Redefinir senha</a></p>
+                <p>Ainda não possui cadastro? <a href="cadastro-tipo.html">Clique aqui</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Desenvolvido por Atentus Cloud</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        // Login form submission
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('login-btn');
+            
+            // Validate inputs
+            if (!username.trim() || !password.trim()) {
+                showAlert('error', 'Por favor, preencha todos os campos.');
+                return;
+            }
+            
+            // Show loading state
+            loginBtn.innerHTML = '<span class="loading"></span> Entrando...';
+            loginBtn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Reset button
+                loginBtn.innerHTML = 'Entrar';
+                loginBtn.disabled = false;
+                
+                // Simulate login validation
+                if (username === 'admin' && password === 'admin123') {
+                    showAlert('success', 'Login realizado com sucesso! Redirecionando...');
+                    
+                    // Store user session (would be JWT token in real app)
+                    sessionStorage.setItem('userLoggedIn', 'true');
+                    sessionStorage.setItem('username', username);
+                    
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+                } else {
+                    showAlert('error', 'Usuário ou senha incorretos.');
+                }
+            }, 1500);
+        });
+
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            if (sessionStorage.getItem('userLoggedIn')) {
+                showAlert('info', 'Você já está logado. Redirecionando...');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
