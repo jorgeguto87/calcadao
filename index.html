@@ -17,6 +17,7 @@
                 <div class="header-buttons">
                     <a href="login.html" class="btn btn-login">Login</a>
                     <a href="cadastro-tipo.html" class="btn btn-cadastro">Cadastro</a>
+                    <a href="painel.html" class="btn btn-painel">Painel</a>
                 </div>
             </div>
         </div>
@@ -37,11 +38,60 @@
         </div>
     </section>
 
+    <!-- Filters Section -->
+    <section class="filters-section">
+        <div class="container">
+            <div class="filters-container">
+                <h3>Filtrar Veículos</h3>
+                <div class="filters-grid">
+                    <select class="filter-select" id="filter-type">
+                        <option value="">Todos os tipos</option>
+                        <option value="car">Carros</option>
+                        <option value="motorcycle">Motos</option>
+                    </select>
+                    
+                    <select class="filter-select" id="filter-brand">
+                        <option value="">Todas as marcas</option>
+                    </select>
+                    
+                    <select class="filter-select" id="filter-price">
+                        <option value="">Faixa de preço</option>
+                        <option value="0-30000">Até R$ 30.000</option>
+                        <option value="30000-60000">R$ 30.000 - R$ 60.000</option>
+                        <option value="60000-100000">R$ 60.000 - R$ 100.000</option>
+                        <option value="100000+">Acima de R$ 100.000</option>
+                    </select>
+                    
+                    <select class="filter-select" id="filter-year">
+                        <option value="">Ano</option>
+                        <option value="2024-2025">2024-2025</option>
+                        <option value="2020-2023">2020-2023</option>
+                        <option value="2015-2019">2015-2019</option>
+                        <option value="2010-2014">2010-2014</option>
+                    </select>
+                    
+                    <button class="filter-btn" onclick="applyFilters()">Filtrar</button>
+                    <button class="clear-filters-btn" onclick="clearFilters()">Limpar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Featured Section -->
     <section class="featured">
         <div class="container">
             <h2>Principais Destaques</h2>
+            <div class="sort-options">
+                <select class="sort-select" id="sort-vehicles" onchange="sortFeaturedVehicles()">
+                    <option value="date-desc">Mais recentes</option>
+                    <option value="price-asc">Menor preço</option>
+                    <option value="price-desc">Maior preço</option>
+                    <option value="year-desc">Ano (mais novo)</option>
+                    <option value="mileage-asc">Menor quilometragem</option>
+                </select>
+            </div>
             <div class="featured-grid" id="featured-vehicles">
+                <!-- Sample vehicles -->
                 <div class="car-card" onclick="viewVehicle(1)">
                     <div class="car-image">Imagem do veículo</div>
                     <div class="car-info">
@@ -87,49 +137,59 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="load-more-container">
+                <button class="load-more-btn" onclick="loadMoreVehicles()">Carregar mais veículos</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Quer vender seu veículo?</h2>
+                <p>Cadastre-se gratuitamente e anuncie com segurança</p>
+                <div class="cta-buttons">
+                    <a href="cadastro-tipo.html" class="btn btn-primary">Criar Conta</a>
+                    <a href="painel.html" class="btn btn-secondary">Acessar Painel</a>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>Desenvolvido por Atentus Cloud</p>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Calçadão do Automóvel</h4>
+                    <p>A maneira mais segura de comprar e vender veículos</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links Úteis</h4>
+                    <ul>
+                        <li><a href="index.html">Início</a></li>
+                        <li><a href="cadastro-tipo.html">Cadastrar</a></li>
+                        <li><a href="login.html">Login</a></li>
+                        <li><a href="painel.html">Painel</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Suporte</h4>
+                    <ul>
+                        <li><a href="#" onclick="showContact()">Fale Conosco</a></li>
+                        <li><a href="#" onclick="showReport()">Denunciar</a></li>
+                        <li><a href="#" onclick="showHelp()">Ajuda</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Desenvolvido por Atentus Cloud</p>
+            </div>
         </div>
     </footer>
 
     <script src="app.js"></script>
-    <script>
-        // Search functionality
-        function performSearch() {
-            const searchTerm = document.getElementById('search-input').value;
-            if (searchTerm.trim()) {
-                // Simulate search results
-                showAlert('info', `Pesquisando por: ${searchTerm}. Funcionalidade será implementada nas próximas etapas.`);
-            }
-        }
-
-        // Enter key search
-        document.getElementById('search-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                performSearch();
-            }
-        });
-
-        // View vehicle details
-        function viewVehicle(id) {
-            showAlert('info', `Visualizando detalhes do veículo ${id}. Esta funcionalidade será implementada nas próximas etapas.`);
-        }
-
-        // Load featured vehicles (simulate API call)
-        function loadFeaturedVehicles() {
-            // This would be replaced with actual API call
-            console.log('Loading featured vehicles...');
-        }
-
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            loadFeaturedVehicles();
-        });
-    </script>
 </body>
 </html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Usuário - Calçadão do Automóvel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo__img" onclick="showHome()">
+                    <img src="logo_calcadao.png" alt="Calçadão do Automóvel" height="100px" width=auto>
+                </a>
+                <div class="header-buttons">
+                    <span class="user-welcome" id="user-welcome">Bem-vindo!</span>
+                    <button class="btn btn-logout" onclick="logout()">Sair</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Yellow Bar -->
+    <div class="yellow-bar"></div>
+
+    <!-- Dashboard -->
+    <div class="container">
+        <!-- User not logged in -->
+        <div id="login-required" class="login-required">
+            <div class="login-prompt">
+                <h2>Acesso Restrito</h2>
+                <p>Você precisa estar logado para acessar o painel.</p>
+                <div class="login-buttons">
+                    <a href="login.html" class="btn btn-primary">Fazer Login</a>
+                    <a href="cadastro-tipo.html" class="btn btn-secondary">Criar Conta</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div id="dashboard-content" class="dashboard-content hidden">
+            <div class="dashboard-header">
+                <h1>Painel do Usuário</h1>
+                <div class="user-status" id="user-status">
+                    <span class="status-badge" id="verification-status">Não Verificado</span>
+                    <span class="vehicle-count" id="vehicle-count">0 anúncios ativos</span>
+                </div>
+            </div>
+
+            <div id="alert-container"></div>
+
+            <!-- Verification Alert -->
+            <div id="verification-alert" class="alert alert-warning">
+                <strong>⚠️ Verificação Pendente</strong>
+                <p>Para maior segurança, complete a verificação da sua identidade.</p>
+                <button class="btn btn-small" onclick="goToVerification()">Verificar Agora</button>
+            </div>
+
+            <!-- Dashboard Navigation -->
+            <div class="dashboard-nav">
+                <button class="nav-tab active" onclick="showDashboardSection('overview')">
+                    <span class="nav-icon">📊</span>
+                    Visão Geral
+                </button>
+                <button class="nav-tab" onclick="showDashboardSection('add-vehicle')">
+                    <span class="nav-icon">➕</span>
+                    Cadastrar Anúncio
+                </button>
+                <button class="nav-tab" onclick="showDashboardSection('my-ads')">
+                    <span class="nav-icon">🚗</span>
+                    Meus Anúncios
+                </button>
+                <button class="nav-tab" onclick="showDashboardSection('profile')">
+                    <span class="nav-icon">👤</span>
+                    Perfil
+                </button>
+                <button class="nav-tab" onclick="showDashboardSection('support')">
+                    <span class="nav-icon">💬</span>
+                    Suporte
+                </button>
+            </div>
+
+            <!-- Overview Section -->
+            <div id="overview-section" class="dashboard-section">
+                <div class="overview-grid">
+                    <div class="overview-card">
+                        <div class="card-header">
+                            <h3>Meus Anúncios</h3>
+                            <span class="card-icon">🚗</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="stat-number" id="total-ads">0</div>
+                            <div class="stat-label">Anúncios ativos</div>
+                            <div class="stat-sublabel">
+                                <span id="ads-limit-info">Limite: 2 anúncios</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overview-card">
+                        <div class="card-header">
+                            <h3>Visualizações</h3>
+                            <span class="card-icon">👀</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="stat-number" id="total-views">0</div>
+                            <div class="stat-label">Visualizações totais</div>
+                            <div class="stat-sublabel">Últimos 30 dias</div>
+                        </div>
+                    </div>
+
+                    <div class="overview-card">
+                        <div class="card-header">
+                            <h3>Mensagens</h3>
+                            <span class="card-icon">💬</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="stat-number" id="total-messages">0</div>
+                            <div class="stat-label">Mensagens recebidas</div>
+                            <div class="stat-sublabel">Interessados em seus veículos</div>
+                        </div>
+                    </div>
+
+                    <div class="overview-card">
+                        <div class="card-header">
+                            <h3>Status da Conta</h3>
+                            <span class="card-icon" id="account-status-icon">⏳</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="stat-text" id="account-status-text">Pendente</div>
+                            <div class="stat-label">Verificação de identidade</div>
+                            <div class="stat-sublabel">
+                                <button class="btn btn-small" onclick="goToVerification()">Verificar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="recent-activity">
+                    <h3>Atividades Recentes</h3>
+                    <div class="activity-list" id="activity-list">
+                        <div class="activity-item">
+                            <span class="activity-icon">🎯</span>
+                            <div class="activity-info">
+                                <div class="activity-text">Bem-vindo ao Calçadão do Automóvel!</div>
+                                <div class="activity-date">Hoje</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Vehicle Section -->
+            <div id="add-vehicle-section" class="dashboard-section hidden">
+                <div class="section-header">
+                    <h2>Cadastrar Novo Anúncio</h2>
+                    <div class="limits-info">
+                        <span id="current-ads-count">0</span> de <span id="max-ads-count">2</span> anúncios utilizados
+                    </div>
+                </div>
+                
+                <div class="add-vehicle-content">
+                    <div class="quick-add-card" onclick="goToVehicleForm()">
+                        <div class="quick-add-icon">🚗</div>
+                        <h3>Cadastrar Veículo</h3>
+                        <p>Clique aqui para cadastrar um novo veículo</p>
+                        <div class="quick-add-arrow">→</div>
+                    </div>
+
+                    <div class="add-tips">
+                        <h4>💡 Dicas para um bom anúncio:</h4>
+                        <ul>
+                            <li>Use fotos nítidas e bem iluminadas</li>
+                            <li>Descreva detalhadamente o veículo</li>
+                            <li>Seja honesto sobre o estado do veículo</li>
+                            <li>Inclua todos os opcionais disponíveis</li>
+                            <li>Mantenha o preço competitivo</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Ads Section -->
+            <div id="my-ads-section" class="dashboard-section hidden">
+                <div class="section-header">
+                    <h2>Meus Anúncios</h2>
+                    <div class="ads-controls">
+                        <select class="filter-select" id="ads-status-filter" onchange="filterMyAds()">
+                            <option value="all">Todos os status</option>
+                            <option value="active">Ativos</option>
+                            <option value="inactive">Inativos</option>
+                            <option value="sold">Vendidos</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="goToVehicleForm()">+ Novo Anúncio</button>
+                    </div>
+                </div>
+
+                <div class="my-ads-content">
+                    <div id="no-ads" class="no-content">
+                        <div class="no-content-icon">🚗</div>
+                        <h3>Nenhum anúncio cadastrado</h3>
+                        <p>Você ainda não possui anúncios. Cadastre seu primeiro veículo!</p>
+                        <button class="btn btn-primary" onclick="goToVehicleForm()">Cadastrar Primeiro Anúncio</button>
+                    </div>
+
+                    <div id="ads-grid" class="ads-grid hidden">
+                        <!-- User ads will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Section -->
+            <div id="profile-section" class="dashboard-section hidden">
+                <div class="section-header">
+                    <h2>Meu Perfil</h2>
+                    <button class="btn btn-secondary" onclick="enableProfileEdit()">Editar Perfil</button>
+                </div>
+
+                <div class="profile-content">
+                    <div class="profile-form">
+                        <div class="form-group">
+                            <label class="form-label">Nome Completo:</label>
+                            <input type="text" class="form-input" id="profile-name" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Email:</label>
+                            <input type="email" class="form-input" id="profile-email" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Telefone:</label>
+                            <input type="tel" class="form-input" id="profile-phone" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Data de Nascimento:</label>
+                            <input type="date" class="form-input" id="profile-birthdate" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">CPF:</label>
+                            <input type="text" class="form-input" id="profile-cpf" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">CEP:</label>
+                            <input type="text" class="form-input" id="profile-cep" readonly>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Cidade:</label>
+                                <input type="text" class="form-input" id="profile-city" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Estado:</label>
+                                <input type="text" class="form-input" id="profile-state" readonly>
+                            </div>
+                        </div>
+
+                        <div class="profile-buttons hidden" id="profile-edit-buttons">
+                            <button class="btn btn-primary" onclick="saveProfile()">Salvar Alterações</button>
+                            <button class="btn btn-secondary" onclick="cancelProfileEdit()">Cancelar</button>
+                        </div>
+                    </div>
+
+                    <div class="account-settings">
+                        <h3>Configurações da Conta</h3>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Verificação de Identidade</h4>
+                                <p>Status da verificação da sua identidade</p>
+                            </div>
+                            <div class="setting-action">
+                                <span class="status-badge" id="profile-verification-status">Pendente</span>
+                                <button class="btn btn-small" onclick="goToVerification()" id="verify-identity-btn">Verificar</button>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Alterar Senha</h4>
+                                <p>Modifique sua senha de acesso</p>
+                            </div>
+                            <div class="setting-action">
+                                <button class="btn btn-small" onclick="showChangePassword()">Alterar</button>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Excluir Conta</h4>
+                                <p>Remover permanentemente sua conta</p>
+                            </div>
+                            <div class="setting-action">
+                                <button class="btn btn-danger btn-small" onclick="confirmDeleteAccount()">Excluir</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support Section -->
+            <div id="support-section" class="dashboard-section hidden">
+                <div class="section-header">
+                    <h2>Suporte</h2>
+                </div>
+
+                <div class="support-content">
+                    <div class="support-options">
+                        <div class="support-card" onclick="showContactForm()">
+                            <div class="support-icon">💬</div>
+                            <h3>Fale Conosco</h3>
+                            <p>Entre em contato com nossa equipe de suporte</p>
+                        </div>
+
+                        <div class="support-card" onclick="showReportForm()">
+                            <div class="support-icon">⚠️</div>
+                            <h3>Denunciar</h3>
+                            <p>Reporte problemas ou usuários suspeitos</p>
+                        </div>
+
+                        <div class="support-card" onclick="showFAQ()">
+                            <div class="support-icon">❓</div>
+                            <h3>FAQ</h3>
+                            <p>Perguntas frequentes e ajuda</p>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div id="contact-form" class="support-form hidden">
+                        <h3>Fale Conosco</h3>
+                        <form onsubmit="submitContactForm(event)">
+                            <div class="form-group">
+                                <label class="form-label">Assunto:</label>
+                                <select class="form-select" id="contact-subject" required>
+                                    <option value="">Selecione o assunto</option>
+                                    <option value="duvida">Dúvida geral</option>
+                                    <option value="problema-tecnico">Problema técnico</option>
+                                    <option value="anuncio">Problemas com anúncio</option>
+                                    <option value="pagamento">Pagamento</option>
+                                    <option value="verificacao">Verificação de identidade</option>
+                                    <option value="outro">Outro</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Mensagem:</label>
+                                <textarea class="form-input" id="contact-message" rows="5" 
+                                         placeholder="Descreva sua dúvida ou problema..." required></textarea>
+                            </div>
+                            
+                            <div class="form-buttons">
+                                <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
+                                <button type="button" class="btn btn-secondary" onclick="hideContactForm()">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Report Form -->
+                    <div id="report-form" class="support-form hidden">
+                        <h3>Fazer Denúncia</h3>
+                        <form onsubmit="submitReportForm(event)">
+                            <div class="form-group">
+                                <label class="form-label">Tipo de Denúncia:</label>
+                                <select class="form-select" id="report-type" required>
+                                    <option value="">Selecione o tipo</option>
+                                    <option value="anuncio-falso">Anúncio falso</option>
+                                    <option value="preco-abusivo">Preço abusivo</option>
+                                    <option value="usuario-suspeito">Usuário suspeito</option>
+                                    <option value="spam">Spam</option>
+                                    <option value="conteudo-inadequado">Conteúdo inadequado</option>
+                                    <option value="outro">Outro</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">ID do Anúncio (se aplicável):</label>
+                                <input type="text" class="form-input" id="report-ad-id" 
+                                       placeholder="Ex: 123456">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Descrição:</label>
+                                <textarea class="form-input" id="report-description" rows="5" 
+                                         placeholder="Descreva o problema encontrado..." required></textarea>
+                            </div>
+                            
+                            <div class="form-buttons">
+                                <button type="submit" class="btn btn-primary">Enviar Denúncia</button>
+                                <button type="button" class="btn btn-secondary" onclick="hideReportForm()">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- FAQ -->
+                    <div id="faq-content" class="faq-content hidden">
+                        <h3>Perguntas Frequentes</h3>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFAQ(this)">
+                                <h4>Como funciona a verificação de identidade?</h4>
+                                <span class="faq-arrow">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>A verificação de identidade é um processo de segurança onde você envia uma foto do seu documento oficial (RG ou CNH) e uma selfie. Nosso sistema automatizado verifica a autenticidade dos documentos e compara a selfie com a foto do documento para confirmar sua identidade.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFAQ(this)">
+                                <h4>Quantos veículos posso anunciar?</h4>
+                                <span class="faq-arrow">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Pessoas físicas podem anunciar até 2 veículos simultaneamente. Pessoas jurídicas podem anunciar até 20 veículos. Para aumentar seu limite, entre em contato com nosso suporte.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFAQ(this)">
+                                <h4>Como editar meu anúncio?</h4>
+                                <span class="faq-arrow">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Acesse a seção "Meus Anúncios" no painel e clique no botão "Editar" do anúncio desejado. Você pode alterar fotos, descrição, preço e opcionais. Mudanças na marca, modelo ou ano requerem nova validação.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFAQ(this)">
+                                <h4>Como funciona a validação por IA?</h4>
+                                <span class="faq-arrow">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Nosso sistema de IA analisa as fotos do veículo para verificar se correspondem às informações fornecidas (marca, modelo, cor, etc.) e se todas as fotos obrigatórias foram enviadas com qualidade adequada.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="password-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Alterar Senha</h3>
+            <form onsubmit="changePassword(event)">
+                <div class="form-group">
+                    <label class="form-label">Senha Atual:</label>
+                    <input type="password" class="form-input" id="current-password" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nova Senha:</label>
+                    <input type="password" class="form-input" id="new-password" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Confirmar Nova Senha:</label>
+                    <input type="password" class="form-input" id="confirm-password" required>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">Alterar Senha</button>
+                    <button type="button" class="btn btn-secondary" onclick="hidePasswordModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Desenvolvido por Atentus Cloud</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

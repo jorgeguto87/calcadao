@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificação de Identidade - Calçadão do Automóvel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo__img" onclick="showHome()">
+                    <img src="logo_calcadao.png" alt="Calçadão do Automóvel" height="100px" width=auto>
+                </a>
+                <div class="header-buttons">
+                    <a href="login.html" class="btn btn-login">Login</a>
+                    <a href="cadastro-tipo.html" class="btn btn-cadastro">Cadastro</a>
+                    <a href="painel.html" class="btn btn-painel">Painel</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Yellow Bar -->
+    <div class="yellow-bar"></div>
+
+    <!-- Verification Section -->
+    <div class="container">
+        <div class="verification-container">
+            <div class="verification-header">
+                <h2 class="form-title">Verificação de Identidade</h2>
+                <div class="progress-indicator">
+                    <div class="progress-step completed"></div>
+                    <div class="progress-step active"></div>
+                    <div class="progress-step"></div>
+                </div>
+            </div>
+
+            <div id="alert-container"></div>
+
+            <!-- Step 1: Document Upload -->
+            <div id="document-step" class="verification-step">
+                <div class="step-content">
+                    <h3>Envie uma foto do seu documento</h3>
+                    <p class="step-description">
+                        Para sua segurança e a de outros usuários, precisamos verificar sua identidade.
+                        Envie uma foto clara do seu RG ou CNH.
+                    </p>
+
+                    <div class="document-guidelines">
+                        <h4>📋 Instruções para a foto do documento:</h4>
+                        <ul>
+                            <li>✅ Documento deve estar dentro da validade</li>
+                            <li>✅ Foto deve ser nítida e bem iluminada</li>
+                            <li>✅ Todos os dados devem estar visíveis</li>
+                            <li>❌ Não envie documentos rasurados ou danificados</li>
+                            <li>❌ Não cubra nenhuma parte do documento</li>
+                        </ul>
+                    </div>
+
+                    <div class="document-type-selector">
+                        <label class="document-option">
+                            <input type="radio" name="document-type" value="rg" checked>
+                            <div class="document-card">
+                                <div class="document-icon">🆔</div>
+                                <div class="document-info">
+                                    <h4>RG - Registro Geral</h4>
+                                    <p>Carteira de identidade</p>
+                                </div>
+                            </div>
+                        </label>
+                        
+                        <label class="document-option">
+                            <input type="radio" name="document-type" value="cnh">
+                            <div class="document-card">
+                                <div class="document-icon">🚗</div>
+                                <div class="document-info">
+                                    <h4>CNH - Carteira de Motorista</h4>
+                                    <p>Carteira nacional de habilitação</p>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="file-upload-section">
+                        <div class="file-upload document-upload" onclick="document.getElementById('document-photo').click()">
+                            <div class="upload-icon">📷</div>
+                            <p>Clique para tirar foto do documento</p>
+                            <input type="file" id="document-photo" style="display: none" accept="image/*" capture="environment">
+                        </div>
+                        <div id="document-preview"></div>
+                    </div>
+
+                    <button class="form-submit" id="document-next-btn" onclick="nextToSelfie()" disabled>
+                        Continuar para Selfie
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Selfie -->
+            <div id="selfie-step" class="verification-step hidden">
+                <div class="step-content">
+                    <h3>Tire uma selfie</h3>
+                    <p class="step-description">
+                        Agora precisamos de uma selfie sua para comparar com o documento enviado.
+                        Certifique-se de estar em um local bem iluminado.
+                    </p>
+
+                    <div class="selfie-guidelines">
+                        <h4>🤳 Instruções para a selfie:</h4>
+                        <ul>
+                            <li>✅ Olhe diretamente para a câmera</li>
+                            <li>✅ Mantenha expressão neutra</li>
+                            <li>✅ Certifique-se de estar bem iluminado</li>
+                            <li>✅ Remova óculos escuros e bonés</li>
+                            <li>❌ Não faça poses ou expressões exageradas</li>
+                            <li>❌ Não use filtros ou edite a foto</li>
+                        </ul>
+                    </div>
+
+                    <div class="selfie-capture-area">
+                        <div class="selfie-frame">
+                            <div class="face-outline"></div>
+                            <p>Posicione seu rosto dentro do círculo</p>
+                        </div>
+                        
+                        <div class="file-upload selfie-upload" onclick="document.getElementById('selfie-photo').click()">
+                            <div class="upload-icon">🤳</div>
+                            <p>Clique para tirar sua selfie</p>
+                            <input type="file" id="selfie-photo" style="display: none" accept="image/*" capture="user">
+                        </div>
+                        <div id="selfie-preview"></div>
+                    </div>
+
+                    <div class="verification-buttons">
+                        <button class="form-submit secondary" onclick="backToDocument()">
+                            ← Voltar
+                        </button>
+                        <button class="form-submit" id="selfie-next-btn" onclick="startVerification()" disabled>
+                            Verificar Identidade
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Verification Processing -->
+            <div id="processing-step" class="verification-step hidden">
+                <div class="step-content">
+                    <div class="processing-animation">
+                        <div class="loading-spinner"></div>
+                        <h3>Verificando sua identidade...</h3>
+                        <p class="processing-text">Aguarde enquanto nosso sistema analisa suas fotos</p>
+                        
+                        <div class="processing-steps">
+                            <div class="processing-item" id="step-document">
+                                <span class="processing-icon">⏳</span>
+                                <span>Analisando documento...</span>
+                            </div>
+                            <div class="processing-item" id="step-face">
+                                <span class="processing-icon">⏳</span>
+                                <span>Analisando selfie...</span>
+                            </div>
+                            <div class="processing-item" id="step-comparison">
+                                <span class="processing-icon">⏳</span>
+                                <span>Comparando identidades...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Results -->
+            <div id="result-step" class="verification-step hidden">
+                <div class="step-content">
+                    <!-- Success Result -->
+                    <div id="success-result" class="result-content hidden">
+                        <div class="result-icon success">✅</div>
+                        <h3>Verificação concluída com sucesso!</h3>
+                        <p>Sua identidade foi verificada. Agora você pode usar todos os recursos da plataforma.</p>
+                        
+                        <div class="verification-summary">
+                            <h4>Resumo da verificação:</h4>
+                            <div class="summary-item">
+                                <span class="summary-label">Documento:</span>
+                                <span class="summary-value" id="verified-document-type">RG</span>
+                                <span class="summary-status success">✓ Válido</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Identidade:</span>
+                                <span class="summary-value">Confirmada</span>
+                                <span class="summary-status success">✓ Verificada</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Status:</span>
+                                <span class="summary-value">Conta verificada</span>
+                                <span class="summary-status success">✓ Ativo</span>
+                            </div>
+                        </div>
+
+                        <button class="form-submit" onclick="completeVerification()">
+                            Continuar para o Painel
+                        </button>
+                    </div>
+
+                    <!-- Failure Result -->
+                    <div id="failure-result" class="result-content hidden">
+                        <div class="result-icon error">❌</div>
+                        <h3>Não foi possível verificar sua identidade</h3>
+                        <p id="failure-reason">Alguns dados não puderam ser validados. Verifique as fotos e tente novamente.</p>
+                        
+                        <div class="failure-tips">
+                            <h4>Dicas para uma verificação bem-sucedida:</h4>
+                            <ul>
+                                <li>Certifique-se de que o documento está nítido e bem iluminado</li>
+                                <li>Todos os dados do documento devem estar visíveis</li>
+                                <li>A selfie deve mostrar claramente seu rosto</li>
+                                <li>Evite sombras ou reflexos nas fotos</li>
+                                <li>Use um fundo neutro para as fotos</li>
+                            </ul>
+                        </div>
+
+                        <div class="verification-buttons">
+                            <button class="form-submit secondary" onclick="restartVerification()">
+                                Tentar Novamente
+                            </button>
+                            <button class="form-submit" onclick="contactSupport()">
+                                Contactar Suporte
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Desenvolvido por Atentus Cloud</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
